@@ -1,11 +1,11 @@
-import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 /**
- * The Main program implements an application that
- * gets input from the user, then uses an object to
- * perform commands in a Stack.
+ * The StudentInventory program implements an application
+ * that gets input from the user, stores it in an object,
+ * then uses a separate class to properly print it.
  *
  * @author  Ina Tolo
  * @version 1.0
@@ -25,65 +25,120 @@ public class StudentInventory {
      * Constant for error response.
      */
     private static final String ERROR_MESSAGE = "Not a valid option.\n";
+    /**
+     * Constant for max grade.
+     */
+    private static final int MAX_GRADE = 12;
 
     /**
      * Empty constructor.
      */
     public StudentInventory() { }
 
+    /**
+     * Main entry into program.
+     *
+     * @param args nothing passed in
+     */
     public static void main(String[] args) {
         // declaring variables
         Student aStudent;
-        Scanner sc = new Scanner(System.in);
+        Scanner userInput = new Scanner(System.in);
         String newStudentCheckLow = "";
         String newStudentCheckUp = "";
+        String studentNumString = "";
+        String studentGradeString = "";
+        String studentIepString = "";
+        String studentIepStringLow = "";
         String firstName = "";
         String middleInitial = "";
         String lastName = "";
         int studentGrade;
-        boolean studnetIEP;
+        boolean studnetIep;
         List<Student> listOfStudents = new ArrayList<Student>();
         int studentNum = 0;
         int elementNum = 0;
-        
+
         while (newStudentCheckUp != Y || newStudentCheckUp != N) {
             // asks user if they want to enter new studnet
-            System.out.print("Do you want to enter a student (y/n)?: ");
-            newStudentCheckLow = sc.nextLine();
-            
+            System.out.print("Do you want to enter a student (Y/N)?: ");
+            newStudentCheckLow = userInput.nextLine();
+
             newStudentCheckUp = newStudentCheckLow.toUpperCase();
-            
-            if (newStudentCheckUp == Y) {
-                System.out.print("How many student would you like to enter?: ");
-                studentNum = sc.nextInt();
 
-                while (elementNum <= studentNum) {
-                    System.out.print("Enter the first name: ");
-                    firstName = sc.nextLine();
+            if (Y.equals(newStudentCheckUp)) {
+                System.out.print("How many students "
+                    + "would you like to enter?: ");
+                studentNumString = userInput.nextLine();
 
-                    System.out.print("Enter the middle initial: ");
-                    middleInitial = sc.nextLine();
+                try {
+                    studentNum = Integer.parseInt(studentNumString);
 
-                    System.out.print("Enter the last name: ");
-                    lastName = sc.nextLine();
+                    if (studentNum < 0) {
+                        System.out.println(ERROR_MESSAGE);
+                        continue;
+                    }
 
-                    System.out.print("Enter the grade: ");
-                    studentGrade = sc.nextInt();
+                    while (elementNum != studentNum) {
+                        // gets users information
+                        System.out.print("Enter the first name: ");
+                        firstName = userInput.nextLine();
 
-                    System.out.print("Enter the IEP status (y/n): ");
-                    studnetIEP = sc.nextBoolean();
+                        System.out.print("Enter the middle initial: ");
+                        middleInitial = userInput.nextLine();
 
-                    // create a new student
-                    aStudent = new Student (firstName, middleInitial, lastName, studentGrade, studnetIEP);
+                        System.out.print("Enter the last name: ");
+                        lastName = userInput.nextLine();
 
-                    listOfStudents.add(aStudent);
-                    
-                    aStudent.print();
+                        System.out.print("Enter the grade: ");
+                        studentGradeString = userInput.nextLine();
 
-                    elementNum++;
+                        try {
+                            studentGrade = Integer.parseInt(
+                                studentGradeString);
+
+                            if (studentGrade < 1
+                                || studentGrade > MAX_GRADE) {
+                                System.out.println(ERROR_MESSAGE);
+                                continue;
+                            }
+                        } catch (IllegalArgumentException exception) {
+                            System.out.println(ERROR_MESSAGE);
+                        }
+
+                        System.out.print("Enter the IEP "
+                            + "status (true/false): ");
+                        studentIepString = userInput.nextLine();
+
+                        studentIepStringLow =
+                            studentIepString.toLowerCase();
+
+                        try {
+                            studnetIep = Boolean.parseBoolean(
+                                studentIepStringLow);
+
+                            // create a new student
+                            aStudent = new Student(firstName, middleInitial,
+                                lastName, studentGrade, studnetIep);
+
+                            // adds student object to the list
+                            listOfStudents.add(aStudent);
+
+                            aStudent.print();
+
+                            elementNum++;
+                        } catch (IllegalArgumentException
+                            exception) {
+                            System.out.println(ERROR_MESSAGE);
+                        }
+                    }
+                    break;
+                } catch (IllegalArgumentException exception) {
+                    System.out.println(ERROR_MESSAGE);
                 }
-            } else if (newStudentCheckUp == N) {
+            } else if (N.equals(newStudentCheckUp)) {
                 System.out.println("Program closed.");
+                break;
             } else {
                 System.out.println(ERROR_MESSAGE);
             }
