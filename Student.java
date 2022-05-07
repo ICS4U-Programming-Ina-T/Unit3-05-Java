@@ -49,13 +49,13 @@ public class Student {
     }
 
     /**
-     * Function that displays student format.
+     * Function that formats and displays the student info.
      */
     public void print() {
         System.out.println();
         System.out.println("First name: " + _firstName);
-        System.out.println("Last name: " + _midInit);
-        System.out.println("Middle initial: " + _lastName + ".");
+        System.out.println("Middle initial: " + _midInit + ".");
+        System.out.println("Last name: " + _lastName);
         System.out.println("Grade: " + _grade);
         System.out.println("IEP: " + _iep);
     }

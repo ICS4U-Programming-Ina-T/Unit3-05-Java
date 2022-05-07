@@ -29,6 +29,14 @@ public class StudentInventory {
      * Constant for max grade.
      */
     private static final int MAX_GRADE = 12;
+    /**
+     * Constant for true as a string.
+     */
+    private static final String TRUE = "true";
+    /**
+     * Constant for false as a string.
+     */
+    private static final String FALSE = "false";
 
     /**
      * Empty constructor.
@@ -42,7 +50,6 @@ public class StudentInventory {
      */
     public static void main(String[] args) {
         // declaring variables
-        Student aStudent;
         Scanner userInput = new Scanner(System.in);
         String newStudentCheckLow = "";
         String newStudentCheckUp = "";
@@ -53,11 +60,21 @@ public class StudentInventory {
         String firstName = "";
         String middleInitial = "";
         String lastName = "";
-        int studentGrade;
-        boolean studnetIep;
+        String bestSubject = "";
+        String worstSubject = "";
+        int studentGrade = 0;
+        boolean studentIep = false;
         List<Student> listOfStudents = new ArrayList<Student>();
-        int studentNum = 0;
+        List<Subject> listofSubjectHistory = new ArrayList<Subject>();
+        int studentNum = -1;
         int elementNum = 0;
+
+        // create a new student
+        Student aStudent = new Student(firstName, middleInitial,
+            lastName, studentGrade, studentIep);
+
+        // create a new subject history
+        Subject aSubject = new Subject(bestSubject, worstSubject);
 
         while (newStudentCheckUp != Y || newStudentCheckUp != N) {
             // asks user if they want to enter new studnet
@@ -66,76 +83,110 @@ public class StudentInventory {
 
             newStudentCheckUp = newStudentCheckLow.toUpperCase();
 
+            // checks if user wants to add a student
             if (Y.equals(newStudentCheckUp)) {
-                System.out.print("How many students "
-                    + "would you like to enter?: ");
-                studentNumString = userInput.nextLine();
+                while (studentNum < 0) {
+                    System.out.print("How many students "
+                        + "would you like to enter?: ");
+                    studentNumString = userInput.nextLine();
 
-                try {
-                    studentNum = Integer.parseInt(studentNumString);
+                    try {
+                        studentNum = Integer.parseInt(studentNumString);
 
-                    if (studentNum < 0) {
-                        System.out.println(ERROR_MESSAGE);
-                        continue;
-                    }
+                        if (studentNum < 0) {
+                            System.out.println(ERROR_MESSAGE);
+                            continue;
+                        }
 
-                    while (elementNum != studentNum) {
-                        // gets users information
-                        System.out.print("Enter the first name: ");
-                        firstName = userInput.nextLine();
+                        while (elementNum != studentNum) {
+                            System.out.println();
+                            // gets users information
+                            System.out.print("Enter the first name: ");
+                            firstName = userInput.nextLine();
 
-                        System.out.print("Enter the middle initial: ");
-                        middleInitial = userInput.nextLine();
+                            System.out.print("Enter the middle initial: ");
+                            middleInitial = userInput.nextLine();
 
-                        System.out.print("Enter the last name: ");
-                        lastName = userInput.nextLine();
+                            System.out.print("Enter the last name: ");
+                            lastName = userInput.nextLine();
 
-                        System.out.print("Enter the grade: ");
-                        studentGradeString = userInput.nextLine();
-
-                        try {
-                            studentGrade = Integer.parseInt(
-                                studentGradeString);
-
-                            if (studentGrade < 1
+                            while (studentGrade < 1
                                 || studentGrade > MAX_GRADE) {
-                                System.out.println(ERROR_MESSAGE);
-                                continue;
+                                System.out.print("Enter the grade: ");
+                                studentGradeString = userInput.nextLine();
+
+                                try {
+                                    studentGrade = Integer.parseInt(
+                                        studentGradeString);
+
+                                    if (studentGrade < 1
+                                        || studentGrade > MAX_GRADE) {
+                                        System.out.println(ERROR_MESSAGE);
+                                        continue;
+                                    } else {
+                                        break;
+                                    }
+                                } catch (IllegalArgumentException exception) {
+                                    System.out.println(ERROR_MESSAGE);
+                                }
                             }
-                        } catch (IllegalArgumentException exception) {
-                            System.out.println(ERROR_MESSAGE);
-                        }
 
-                        System.out.print("Enter the IEP "
-                            + "status (true/false): ");
-                        studentIepString = userInput.nextLine();
+                            while (studentIepStringLow != TRUE
+                                || studentIepStringLow != FALSE) {
+                                System.out.print("Enter the IEP "
+                                    + "status (true/false): ");
+                                studentIepString = userInput.nextLine();
 
-                        studentIepStringLow =
-                            studentIepString.toLowerCase();
+                                studentIepStringLow =
+                                    studentIepString.toLowerCase();
 
-                        try {
-                            studnetIep = Boolean.parseBoolean(
-                                studentIepStringLow);
+                                if (TRUE.equals(studentIepStringLow)
+                                    || FALSE.equals(studentIepStringLow)) {
+                                    studentIep = Boolean.parseBoolean(
+                                        studentIepStringLow);
+                                    break;
+                                } else {
+                                    System.out.println(ERROR_MESSAGE);
+                                    continue;
+                                }
+                            }
 
-                            // create a new student
+                            // gets input about best and worst subjects
+                            System.out.print("Enter the student's"
+                                + " best subject: ");
+                            bestSubject = userInput.nextLine();
+
+                            System.out.print("Enter the student's "
+                                + "worst subject: ");
+                            worstSubject = userInput.nextLine();
+
                             aStudent = new Student(firstName, middleInitial,
-                                lastName, studentGrade, studnetIep);
-
-                            // adds student object to the list
+                                lastName, studentGrade, studentIep);
                             listOfStudents.add(aStudent);
-
-                            aStudent.print();
-
+                            aSubject = new Subject(bestSubject, worstSubject);
+                            listofSubjectHistory.add(aSubject);
+                            studentGrade = -1;
                             elementNum++;
-                        } catch (IllegalArgumentException
-                            exception) {
-                            System.out.println(ERROR_MESSAGE);
                         }
+                        int stuLength = listOfStudents.size();
+
+                        System.out.println("\n---------------------------"
+                            + "---------------------\n");
+                        System.out.println("There are " + stuLength
+                            + " students in the student list.");
+                        System.out.println("The students are:");
+
+                        // calls function to print information
+                        for (int counter = 0; counter
+                            < listOfStudents.size(); counter++) {
+                            listOfStudents.get(counter).print();
+                            listofSubjectHistory.get(counter).print();
+                        }
+                    } catch (IllegalArgumentException exception) {
+                        System.out.println(ERROR_MESSAGE);
                     }
-                    break;
-                } catch (IllegalArgumentException exception) {
-                    System.out.println(ERROR_MESSAGE);
                 }
+                break;
             } else if (N.equals(newStudentCheckUp)) {
                 System.out.println("Program closed.");
                 break;
