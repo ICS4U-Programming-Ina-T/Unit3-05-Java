@@ -93,6 +93,7 @@ public class StudentInventory {
                     try {
                         studentNum = Integer.parseInt(studentNumString);
 
+                        // checks for negative input
                         if (studentNum < 0) {
                             System.out.println(ERROR_MESSAGE);
                             continue;
@@ -119,6 +120,7 @@ public class StudentInventory {
                                     studentGrade = Integer.parseInt(
                                         studentGradeString);
 
+                                    // checks if student grade is within valid range
                                     if (studentGrade < 1
                                         || studentGrade > MAX_GRADE) {
                                         System.out.println(ERROR_MESSAGE);
@@ -133,6 +135,7 @@ public class StudentInventory {
 
                             while (studentIepStringLow != TRUE
                                 || studentIepStringLow != FALSE) {
+                                // gets input for IEP status
                                 System.out.print("Enter the IEP "
                                     + "status (true/false): ");
                                 studentIepString = userInput.nextLine();
@@ -140,6 +143,8 @@ public class StudentInventory {
                                 studentIepStringLow =
                                     studentIepString.toLowerCase();
 
+                                // checks if input can be accepted,
+                                // the converts to boolean value
                                 if (TRUE.equals(studentIepStringLow)
                                     || FALSE.equals(studentIepStringLow)) {
                                     studentIep = Boolean.parseBoolean(
@@ -162,10 +167,19 @@ public class StudentInventory {
 
                             aStudent = new Student(firstName, middleInitial,
                                 lastName, studentGrade, studentIep);
+
+                            // adds student object to list
                             listOfStudents.add(aStudent);
+
                             aSubject = new Subject(bestSubject, worstSubject);
+
+                            // adds subject object to list
                             listofSubjectHistory.add(aSubject);
+                            
+                            // resets student grade
                             studentGrade = -1;
+                            
+                            // increments counter
                             elementNum++;
                         }
                         int stuLength = listOfStudents.size();

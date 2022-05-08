@@ -41,6 +41,7 @@ public class Student {
      */
     public Student(String firstName, String midInit,
         String lastName, int grade, boolean iep) {
+        // referncing objected passed in
         this._firstName = firstName;
         this._midInit = midInit;
         this._lastName = lastName;
